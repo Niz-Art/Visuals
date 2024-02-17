@@ -1,0 +1,101 @@
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Heart Board</title>
+    <style>
+        body {
+            background-color: #D4ECFB;
+            font-family: sans;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        #canvas {
+            border: 5px solid black;
+            border-radius: 10px;
+        }
+
+        #B {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h2  style="text-align:center">Heart Message</h2>
+    <h3 style="text-align:center">Draw your Words with Hearts</h3>
+    <div id="B" >
+        <br>
+        <label for="heartColorPicker">Heart Color: </label>
+        <input type="color" id="heartColorPicker" value="#ff0000">
+        <br>
+        <label for="heartSize">Heart Size: </label>
+        <input type="range" id="heartSize" min="1" max="20" value="2">
+    </div>
+    <br>
+    <div style="text-align: center">
+    <canvas id="canvas" width="500" height="400"></canvas>
+    </div>
+<p style="font-size:16px;">Copyright <span>&copy;<span> Nizar Rejeb</p>
+<br>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const canvas = document.getElementById("canvas");
+            const context = canvas.getContext("2d");
+            const textColorPicker = document.getElementById("textColorPicker");
+            const textInput = document.getElementById("textMessage");
+            const heartColorPicker = document.getElementById("heartColorPicker");
+            const heartSizeInput = document.getElementById("heartSize");
+
+            canvas.addEventListener("click", function(event) {
+                drawHeart(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+            });
+
+            function drawHeart(x, y) {
+                const heartSize = parseInt(heartSizeInput.value, 10);
+                context.fillStyle = heartColorPicker.value;
+                context.beginPath();
+                context.moveTo(x, y);
+                context.bezierCurveTo(x + heartSize, y - 2 * heartSize, x + 2 * heartSize, y - 2 * heartSize, x + 3 * heartSize, y);
+                context.bezierCurveTo(x + 4 * heartSize, y + 2 * heartSize, x + 2 * heartSize, y + 4 * heartSize, x, y + 6 * heartSize);
+                context.bezierCurveTo(x - 2 * heartSize, y + 4 * heartSize, x - 4 * heartSize, y + 2 * heartSize, x - 3 * heartSize, y);
+                context.bezierCurveTo(x - 2 * heartSize, y - 2 * heartSize, x - heartSize, y - 2 * heartSize, x, y);
+                context.fill();
+
+                drawText(textInput.value);
+            }
+
+            textColorPicker.addEventListener("input", function() {
+                drawText(textInput.value);
+            });
+
+            textInput.addEventListener("input", function() {
+                drawHeart(canvas.width / 2, canvas.height / 2);
+            });
+
+            heartColorPicker.addEventListener("input", function() {
+                drawHeart(canvas.width / 2, canvas.height / 2);
+            });
+
+            heartSizeInput.addEventListener("input", function() {
+                drawHeart(canvas.width / 2, canvas.height / 2);
+            });
+
+            function drawText(text) {
+                context.fillStyle = textColorPicker.value;
+                context.font = "20px Arial";
+                context.fillText(text, canvas.width / 2, canvas.height / 2 + 20);
+            }
+        });
+    </script>
+</body>
+
+</html>
